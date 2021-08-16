@@ -1,5 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useState } from "react";
+import CartCard from "../components/cart/cart-item";
 import { Layout } from "../components/Layout";
 import {
   getCartItems,
@@ -16,29 +17,19 @@ const CartPage: React.FC<Props> = () => {
   const cartItems = getCartItems();
   const router = useRouter();
   const [count, setCount] = useState(getProductNumSumInCart());
-  const handlePlus = useCallback((id: string) => {
-    return (_: React.MouseEvent) => {
-      incrementQuantity(id);
-    };
-  }, []);
+  const handlePlus = (id: string) => {
+    incrementQuantity(id);
+    setCount(getProductNumSumInCart());
+  };
   const handleMinus = (id: string) => {
-    return (_: React.MouseEvent) => {
-      decrementQuantity(id);
-    };
+    decrementQuantity(id);
+    setCount(getProductNumSumInCart());
   };
   return (
     <Layout cartCount={count}>
       {cartItems.map((cartItem) => {
         return (
-          <div key={cartItem.product.id}>
-            <img src={cartItem.product.imageUrl} alt={"商品の画像"} />
-            <p>
-              {cartItem.product.name} {cartItem.product.price}円
-            </p>
-            <p>{cartItem.quantity}</p>
-            <button onClick={handlePlus(cartItem.product.id)}>+</button>
-            <button onClick={handleMinus(cartItem.product.id)}> -</button>
-          </div>
+          <CartCard key={cartItem.product.id} cartItem={cartItem} handleMinus={handleMinus} handlePlus={handlePlus} />
         );
       })}
       <p>合計:{getPriceSum()} 円</p>

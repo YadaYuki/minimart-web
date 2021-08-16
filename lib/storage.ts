@@ -3,48 +3,63 @@ import { Product, CartItem } from "./types";
 export const CART_KEY = "cart";
 
 export const addToCart = (product: Product) => {
-  const cartItemStr = localStorage.getItem(CART_KEY);
-  let cartItems: CartItem[];
-  if (cartItemStr == null) {
-    cartItems = [];
-  } else {
-    cartItems = JSON.parse(cartItemStr) as CartItem[];
+  if (process.browser) {
+    const cartItemStr = localStorage.getItem(CART_KEY);
+    let cartItems: CartItem[];
+    if (cartItemStr == null) {
+      cartItems = [];
+    } else {
+      cartItems = JSON.parse(cartItemStr) as CartItem[];
+    }
+    const cartItemIdx = cartItems.findIndex((cartItem: CartItem) => {
+      return cartItem.product.id === product.id;
+    });
+    if (cartItemIdx === -1) {
+      cartItems.push({ product, quantity: 1 });
+    } else {
+      cartItems[cartItemIdx].quantity++;
+    }
+    localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
   }
-  const cartItemIdx = cartItems.findIndex((cartItem: CartItem) => {
-    return cartItem.product.id === product.id;
-  });
-  if (cartItemIdx === -1) {
-    cartItems.push({ product, quantity: 1 });
-  } else {
-    cartItems[cartItemIdx].quantity++;
-  }
-  localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
 };
 
 export const getProductNumSumInCart = (): number => {
-  const cartItemStr = window.localStorage.getItem(CART_KEY);
-  if (cartItemStr == null) {
-    return 0;
+  if (process.browser) {
+    const cartItemStr = window.localStorage.getItem(CART_KEY);
+    if (cartItemStr == null) {
+      return 0;
+    }
+    const cartItems = JSON.parse(cartItemStr) as CartItem[];
+    return sumArray(cartItems.map((cartItem) => cartItem.quantity));
   }
-  const cartItems = JSON.parse(cartItemStr) as CartItem[];
-  return sumArray(cartItems.map((cartItem) => cartItem.quantity));
+  return -1;
 };
 
 export const getCartItems = (): CartItem[] => {
-  const cartItemStr = window.localStorage.getItem(CART_KEY);
-  if (cartItemStr == null) {
-    return [];
+  if (process.browser) {
+    const cartItemStr = window.localStorage.getItem(CART_KEY);
+    if (cartItemStr == null) {
+      return [];
+    }
+    return JSON.parse(cartItemStr) as CartItem[];
   }
-  return JSON.parse(cartItemStr) as CartItem[];
+  return [];
 };
 
 export const getPriceSum = (): number => {
-  const cartItemStr = window.localStorage.getItem(CART_KEY);
-  if (cartItemStr == null) {
-    return 0;
+  if (process.browser) {
+    const cartItemStr = window.localStorage.getItem(CART_KEY);
+    if (cartItemStr == null) {
+      return 0;
+    }
+    const cartItems = JSON.parse(cartItemStr) as CartItem[];
+    return sumArray(cartItems.map((cartItem) => cartItem.product.price * cartItem.quantity));
   }
-  const cartItems = JSON.parse(cartItemStr) as CartItem[];
-  return sumArray(cartItems.map((cartItem) => cartItem.product.price * cartItem.quantity));
+  return 0;
+};
+
+const sumArray = (array: number[]): number => {
+  return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 };
 
 export const incrementQuantity = (id: string) => {
@@ -60,6 +75,7 @@ export const incrementQuantity = (id: string) => {
     return;
   }
   cartItems[cartItemIdx].quantity++;
+  localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
 };
 
 export const decrementQuantity = (id: string) => {
@@ -75,8 +91,5 @@ export const decrementQuantity = (id: string) => {
     return;
   }
   cartItems[cartItemIdx].quantity--;
-};
-
-const sumArray = (array: number[]): number => {
-  return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
 };

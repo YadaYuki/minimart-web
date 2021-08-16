@@ -3,12 +3,16 @@ import { NextPage, GetServerSideProps } from "next";
 import { Product } from "../../lib/types";
 import { getProductDetail } from "../../lib/graphql/product";
 import { Layout } from "../../components/Layout";
+import { addToCart } from "../../lib/storage";
 
 interface Props {
   product: Product;
 }
 
 const DetailPage: NextPage<Props> = ({ product }) => {
+  const handleClick = () => {
+    addToCart(product);
+  };
   return (
     <Layout>
       <div>
@@ -16,7 +20,7 @@ const DetailPage: NextPage<Props> = ({ product }) => {
         <h2>{product.name}</h2>
         <p>{product.price}円</p>
         <p>{product.description}</p>
-        <button>カートに追加する</button>
+        <button onClick={handleClick}>カートに追加する</button>
       </div>
     </Layout>
   );

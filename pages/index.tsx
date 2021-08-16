@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./index.module.css";
-import { listProducts } from "../lib/graphql/product";
+import { listProducts, createOrder } from "../lib/graphql/product";
 import { Product } from "../lib/types";
 import { Layout } from "../components/Layout";
 import { useCartItemCount } from "../lib/hooks/use-cart-item-count";
@@ -12,6 +12,9 @@ const TopPage: FC = () => {
 
   useEffect(() => {
     listProducts().then((products) => setProducts(products));
+    createOrder([]).then(() => {
+      console.log("hoge");
+    });
   }, []);
 
   return (

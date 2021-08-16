@@ -9,10 +9,11 @@ type Props = {
 };
 
 export const Layout: FC<Props> = ({ children }) => {
-  const [cartCount, setCartCount] = useState(0);
   useEffect(() => {
     if (process.browser) {
-      setCartCount(getProductNumSumInCart());
+      window.addEventListener("storage", function (e) {
+        console.log(e.oldValue);
+      });
     }
   }, []);
   return (
@@ -27,9 +28,9 @@ export const Layout: FC<Props> = ({ children }) => {
         <div className={styles.cart}>
           {/* このリンク先はないので新規ページを作る */}
           <Link href="/cart">
-            <a>
+            <a id="hoge">
               <span>🛒</span>
-              <span className={styles.cartCount}>({cartCount})</span>
+              <span className={styles.cartCount}>({getProductNumSumInCart()})</span>
             </a>
           </Link>
         </div>

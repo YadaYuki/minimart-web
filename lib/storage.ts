@@ -1,6 +1,7 @@
 import { Product, CartItem } from "./types";
 
 export const CART_KEY = "cart";
+export const ORDER_KEY = "order";
 
 export const addToCart = (product: Product) => {
   if (process.browser) {

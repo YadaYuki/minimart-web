@@ -1,5 +1,5 @@
 import { graphqlRequest } from "./graphqlClient";
-import { Product } from "../types";
+import { Product, OrderItemInput, Order } from "../types";
 
 const listProductsQuery = `
   query listProducts {
@@ -33,4 +33,51 @@ query getProduct($id: ID!){
 export async function getProductDetail(id: string): Promise<Product> {
   const data = await graphqlRequest({ query: detailProductsQuery, variables: { id } }); // TODO:fix to id
   return data.product;
+}
+
+const createOrderMutation = `
+mutation postOrder($items: [OrderItemInput!]!){
+  createOrder(input:{items:$items}){
+    order{
+      id
+      canceledAt
+      deliveryDate
+      orderedAt
+      totalAmount
+      pickupLocation{
+        id
+        name
+      }
+      items{
+        product{
+          id
+          name
+          price
+          description
+          imageUrl
+        }
+        quantity
+      }
+  }
+  }
+}
+`;
+
+// const mock: OrderItemInput[] = [
+//   {
+//     productId: "UHJvZHVjdC0x",
+//     quantity: 2,
+//   },
+//   {
+//     productId: "UHJvZHVjdC01",
+//     quantity: 1,
+//   },
+// ];
+
+export async function createOrder(orderItemInputs: OrderItemInput[]): Promise<Order> {
+  const data = await graphqlRequest({
+    query: createOrderMutation,
+    variables: { items: orderItemInputs },
+  });
+  return data.createOrder.order;
 }

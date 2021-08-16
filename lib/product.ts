@@ -24,3 +24,15 @@ export async function listProducts(): Promise<Product[]> {
   const data = await graphqlRequest({ query: listProductsQuery });
   return data.products;
 }
+
+const detailProductsQuery = `
+query {
+  product(id: "UHJvZHVjdC0x") {
+    id
+    name
+    description
+    imageUrl
+    price
+  }
+}
+`;

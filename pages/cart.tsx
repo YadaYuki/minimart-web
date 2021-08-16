@@ -1,3 +1,4 @@
+import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useState } from "react";
 import { Layout } from "../components/Layout";
 import {
@@ -6,12 +7,14 @@ import {
   getProductNumSumInCart,
   decrementQuantity,
   incrementQuantity,
+  CART_KEY,
 } from "../lib/storage";
 
 interface Props {}
 
 const CartPage: React.FC<Props> = () => {
   const cartItems = getCartItems();
+  const router = useRouter();
   const [count, setCount] = useState(getProductNumSumInCart());
   const handlePlus = useCallback((id: string) => {
     return (_: React.MouseEvent) => {
@@ -42,8 +45,8 @@ const CartPage: React.FC<Props> = () => {
       <button
         onClick={() => {
           alert("注文しました");
-          localStorage.clear();
-          location.href = "/";
+          localStorage.removeItem(CART_KEY);
+          router.push("/");
         }}
       >
         注文する

@@ -26,8 +26,8 @@ export async function listProducts(): Promise<Product[]> {
 }
 
 const detailProductsQuery = `
-query {
-  product(id: "UHJvZHVjdC0x") {
+query getProduct($id: ID!){
+  product(id: $id) {
     id
     name
     description
@@ -36,3 +36,8 @@ query {
   }
 }
 `;
+
+export async function getProductDetail(id: string): Promise<Product> {
+  const data = await graphqlRequest({ query: detailProductsQuery, variables: { id } }); // TODO:fix to id
+  return data.product;
+}

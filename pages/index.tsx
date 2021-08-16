@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./index.module.css";
-import { listProducts, Product } from "../lib/product";
+import { listProducts, Product, getProductDetail } from "../lib/product";
 import { Layout } from "../components/Layout";
 
 const TopPage: FC = () => {
@@ -9,6 +9,9 @@ const TopPage: FC = () => {
 
   useEffect(() => {
     listProducts().then((products) => setProducts(products));
+    getProductDetail("UHJvZHVjdC0x").then((product) => {
+      console.log(product);
+    });
   }, []);
 
   return (

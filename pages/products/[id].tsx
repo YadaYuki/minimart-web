@@ -1,6 +1,7 @@
 import React from "react";
 import { NextPage, GetServerSideProps } from "next";
-import { Product, getProductDetail } from "../../lib/product";
+import { Product } from "../../lib/types";
+import { getProductDetail } from "../../lib/graphql/product";
 import { Layout } from "../../components/Layout";
 
 interface Props {

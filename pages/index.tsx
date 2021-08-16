@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./index.module.css";
-import { listProducts, Product, getProductDetail } from "../lib/product";
+import { listProducts, getProductDetail } from "../lib/graphql/product";
+import { Product } from "../lib/types";
 import { Layout } from "../components/Layout";
 
 const TopPage: FC = () => {

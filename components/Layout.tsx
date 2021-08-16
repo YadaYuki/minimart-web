@@ -5,17 +5,17 @@ import styles from "./Layout.module.css";
 import { getProductNumSumInCart } from "../lib/storage";
 
 type Props = {
-  // cartCount: number;
+  cartCount: number;
 };
 
-export const Layout: FC<Props> = ({ children }) => {
-  useEffect(() => {
-    if (process.browser) {
-      window.addEventListener("storage", function (e) {
-        console.log(e.oldValue);
-      });
-    }
-  }, []);
+export const Layout: FC<Props> = ({ children, cartCount }) => {
+  // useEffect(() => {
+  //   if (process.browser) {
+  //     window.addEventListener("storage", function (e) {
+  //       console.log(e.oldValue);
+  //     });
+  //   }
+  // }, []);
   return (
     <div>
       <Head>
@@ -30,7 +30,7 @@ export const Layout: FC<Props> = ({ children }) => {
           <Link href="/cart">
             <a id="hoge">
               <span>🛒</span>
-              <span className={styles.cartCount}>({getProductNumSumInCart()})</span>
+              <span className={styles.cartCount}>({cartCount})</span>
             </a>
           </Link>
         </div>

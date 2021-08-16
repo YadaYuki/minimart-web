@@ -1,13 +1,14 @@
 import React from "react";
 import { Layout } from "../components/Layout";
-import { getCartItems, getPriceSum } from "../lib/storage";
+import { getCartItems, getPriceSum, getProductNumSumInCart } from "../lib/storage";
+import { useCartItemCount } from "../lib/hooks/use-cart-item-count";
 
 interface Props {}
 
 const CartPage: React.FC<Props> = () => {
   const cartItems = getCartItems();
   return (
-    <Layout>
+    <Layout cartCount={getProductNumSumInCart()}>
       {cartItems.map((cartItem) => {
         return (
           <div key={cartItem.product.id}>

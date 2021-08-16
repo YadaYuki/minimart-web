@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { Product } from "../../lib/types";
 import { getProductDetail } from "../../lib/graphql/product";
 import { Layout } from "../../components/Layout";
-import { addToCart } from "../../lib/storage";
+import { addToCart, getProductNumSumInCart } from "../../lib/storage";
 
 interface Props {
   product: Product;
@@ -12,9 +12,12 @@ interface Props {
 const DetailPage: NextPage<Props> = ({ product }) => {
   const handleClick = () => {
     addToCart(product);
+    setCartCount(getProductNumSumInCart());
   };
+  // const { cartItemCount, updateCartItemCount } = useCartItemCount();
+  const [cartCount, setCartCount] = useState(getProductNumSumInCart());
   return (
-    <Layout>
+    <Layout cartCount={cartCount}>
       <div>
         <img src={product.imageUrl} alt="食材の写真" />
         <h2>{product.name}</h2>

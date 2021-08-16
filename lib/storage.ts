@@ -59,5 +59,5 @@ export const getPriceSum = (): number => {
 };
 
 const sumArray = (array: number[]): number => {
-  return array.reduce((accumulator, currentValue) => accumulator + currentValue);
+  return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 };

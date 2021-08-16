@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Layout } from "../components/Layout";
-import { getCartItems, getPriceSum, getProductNumSumInCart } from "../lib/storage";
+import {
+  getCartItems,
+  getPriceSum,
+  getProductNumSumInCart,
+  decrementQuantity,
+  incrementQuantity,
+} from "../lib/storage";
 
 interface Props {}
 
 const CartPage: React.FC<Props> = () => {
   const cartItems = getCartItems();
+  const [count, setCount] = useState(getProductNumSumInCart());
+  const handlePlus = useCallback((id: string) => {
+    return (_: React.MouseEvent) => {
+      incrementQuantity(id);
+    };
+  }, []);
+  const handleMinus = (id: string) => {
+    return (_: React.MouseEvent) => {
+      decrementQuantity(id);
+    };
+  };
   return (
-    <Layout cartCount={getProductNumSumInCart()}>
+    <Layout cartCount={count}>
       {cartItems.map((cartItem) => {
         return (
           <div key={cartItem.product.id}>
@@ -16,6 +33,8 @@ const CartPage: React.FC<Props> = () => {
               {cartItem.product.name} {cartItem.product.price}円
             </p>
             <p>{cartItem.quantity}</p>
+            <button onClick={handlePlus(cartItem.product.id)}>+</button>
+            <button onClick={handleMinus(cartItem.product.id)}> -</button>
           </div>
         );
       })}

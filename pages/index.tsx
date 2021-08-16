@@ -4,7 +4,6 @@ import styles from "./index.module.css";
 import { listProducts } from "../lib/graphql/product";
 import { Product } from "../lib/types";
 import { Layout } from "../components/Layout";
-import { getProductNumSumInCart } from "../lib/storage";
 
 const TopPage: FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

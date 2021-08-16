@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout } from "../components/Layout";
-import { getCartItems } from "../lib/storage";
+import { getCartItems, getPriceSum } from "../lib/storage";
 
 interface Props {}
 
@@ -19,6 +19,14 @@ const CartPage: React.FC<Props> = () => {
           </div>
         );
       })}
+      <p>合計:{getPriceSum()} 円</p>
+      <button
+        onClick={() => {
+          alert("注文しました");
+        }}
+      >
+        注文する
+      </button>
     </Layout>
   );
 };

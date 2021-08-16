@@ -30,12 +30,11 @@ export const getProductNumSumInCart = (): number => {
       return 0;
     }
     const cartItems = JSON.parse(cartItemStr) as CartItem[];
-    return cartItems
-      .map((cartItem) => cartItem.quantity)
-      .reduce((accumulator, currentValue) => accumulator + currentValue);
+    return sumArray(cartItems.map((cartItem) => cartItem.quantity));
   }
   return -1;
 };
+
 export const getCartItems = (): CartItem[] => {
   if (process.browser) {
     const cartItemStr = window.localStorage.getItem(CART_KEY);
@@ -45,4 +44,20 @@ export const getCartItems = (): CartItem[] => {
     return JSON.parse(cartItemStr) as CartItem[];
   }
   return [];
+};
+
+export const getPriceSum = (): number => {
+  if (process.browser) {
+    const cartItemStr = window.localStorage.getItem(CART_KEY);
+    if (cartItemStr == null) {
+      return 0;
+    }
+    const cartItems = JSON.parse(cartItemStr) as CartItem[];
+    return sumArray(cartItems.map((cartItem) => cartItem.product.price * cartItem.quantity));
+  }
+  return 0;
+};
+
+const sumArray = (array: number[]): number => {
+  return array.reduce((accumulator, currentValue) => accumulator + currentValue);
 };

@@ -74,10 +74,10 @@ mutation postOrder($items: [OrderItemInput!]!){
 //   },
 // ];
 
-export async function createOrder(orderItemInputs: OrderItemInput[]): Promise<Product> {
+export async function createOrder(orderItemInputs: OrderItemInput[]): Promise<Order> {
   const data = await graphqlRequest({
     query: createOrderMutation,
     variables: { items: orderItemInputs },
-  }); // TODO:fix to id
+  });
   return data.createOrder.order;
 }

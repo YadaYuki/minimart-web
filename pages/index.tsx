@@ -12,9 +12,6 @@ const TopPage: FC = () => {
 
   useEffect(() => {
     listProducts().then((products) => setProducts(products));
-    createOrder([]).then(() => {
-      console.log("hoge");
-    });
   }, []);
 
   return (

@@ -1,7 +1,8 @@
 import { useRouter } from "next/dist/client/router";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import CartCard from "../components/cart/cart-item";
 import { Layout } from "../components/Layout";
+import { createOrder } from "../lib/graphql/product";
 import {
   getCartItems,
   getPriceSum,
@@ -9,7 +10,9 @@ import {
   decrementQuantity,
   incrementQuantity,
   CART_KEY,
+  ORDER_KEY,
 } from "../lib/storage";
+import { Order, OrderItemInput } from "../lib/types";
 
 interface Props {}
 
@@ -35,9 +38,16 @@ const CartPage: React.FC<Props> = () => {
       <p>合計:{getPriceSum()} 円</p>
       <button
         onClick={() => {
-          alert("注文しました");
-          localStorage.removeItem(CART_KEY);
-          router.push("/");
+          const cartItems = getCartItems();
+          const orderItemInputs: OrderItemInput[] = cartItems.map((cartItem) => {
+            return { productId: cartItem.product.id, quantity: cartItem.quantity };
+          });
+          createOrder(orderItemInputs).then((order: Order) => {
+            localStorage.removeItem(CART_KEY);
+            alert("注文しました");
+            localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+            router.push("/order");
+          });
         }}
       >
         注文する

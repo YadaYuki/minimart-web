@@ -1,30 +1,43 @@
-import React from "react";
+import { useRouter } from "next/dist/client/router";
+import React, { useCallback, useState } from "react";
+import CartCard from "../components/cart/cart-item";
 import { Layout } from "../components/Layout";
-import { getCartItems, getPriceSum, getProductNumSumInCart } from "../lib/storage";
+import {
+  getCartItems,
+  getPriceSum,
+  getProductNumSumInCart,
+  decrementQuantity,
+  incrementQuantity,
+  CART_KEY,
+} from "../lib/storage";
 
 interface Props {}
 
 const CartPage: React.FC<Props> = () => {
   const cartItems = getCartItems();
+  const router = useRouter();
+  const [count, setCount] = useState(getProductNumSumInCart());
+  const handlePlus = (id: string) => {
+    incrementQuantity(id);
+    setCount(getProductNumSumInCart());
+  };
+  const handleMinus = (id: string) => {
+    decrementQuantity(id);
+    setCount(getProductNumSumInCart());
+  };
   return (
-    <Layout cartCount={getProductNumSumInCart()}>
+    <Layout cartCount={count}>
       {cartItems.map((cartItem) => {
         return (
-          <div key={cartItem.product.id}>
-            <img src={cartItem.product.imageUrl} alt={"商品の画像"} />
-            <p>
-              {cartItem.product.name} {cartItem.product.price}円
-            </p>
-            <p>{cartItem.quantity}</p>
-          </div>
+          <CartCard key={cartItem.product.id} cartItem={cartItem} handleMinus={handleMinus} handlePlus={handlePlus} />
         );
       })}
       <p>合計:{getPriceSum()} 円</p>
       <button
         onClick={() => {
           alert("注文しました");
-          localStorage.clear();
-          location.href = "/";
+          localStorage.removeItem(CART_KEY);
+          router.push("/");
         }}
       >
         注文する

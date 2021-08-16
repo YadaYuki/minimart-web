@@ -1,6 +1,6 @@
 import { Product, CartItem } from "./types";
 
-const CART_KEY = "cart";
+export const CART_KEY = "cart";
 
 export const addToCart = (product: Product) => {
   if (process.browser) {
@@ -60,4 +60,36 @@ export const getPriceSum = (): number => {
 
 const sumArray = (array: number[]): number => {
   return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+};
+
+export const incrementQuantity = (id: string) => {
+  const cartItemStr = window.localStorage.getItem(CART_KEY);
+  if (cartItemStr == null) {
+    return 0;
+  }
+  const cartItems = JSON.parse(cartItemStr) as CartItem[];
+  const cartItemIdx = cartItems.findIndex((cartItem: CartItem) => {
+    return cartItem.product.id === id;
+  });
+  if (cartItemIdx == -1) {
+    return;
+  }
+  cartItems[cartItemIdx].quantity++;
+  localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+};
+
+export const decrementQuantity = (id: string) => {
+  const cartItemStr = window.localStorage.getItem(CART_KEY);
+  if (cartItemStr == null) {
+    return 0;
+  }
+  const cartItems = JSON.parse(cartItemStr) as CartItem[];
+  const cartItemIdx = cartItems.findIndex((cartItem: CartItem) => {
+    return cartItem.product.id === id;
+  });
+  if (cartItemIdx == -1) {
+    return;
+  }
+  cartItems[cartItemIdx].quantity--;
+  localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
 };

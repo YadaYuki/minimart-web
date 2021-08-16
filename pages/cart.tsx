@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout } from "../components/Layout";
 import { getCartItems, getPriceSum, getProductNumSumInCart } from "../lib/storage";
-import { useCartItemCount } from "../lib/hooks/use-cart-item-count";
 
 interface Props {}
 
@@ -24,6 +23,8 @@ const CartPage: React.FC<Props> = () => {
       <button
         onClick={() => {
           alert("注文しました");
+          localStorage.clear();
+          location.href = "/";
         }}
       >
         注文する

@@ -5,3 +5,8 @@ export type Product = {
   description: string;
   imageUrl: string;
 };
+
+export type CartItem = {
+  product: Product; // 商品
+  quantity: number; // 個数
+};
